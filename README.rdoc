@@ -32,7 +32,7 @@ This plugin is licensed under the GNU GPL v2.  See COPYRIGHT.txt and GPL.txt for
 
 == Authors
 
-This is an updated version of original work done by [Eric Davis](https://github.com/edavis10)
-[https://github.com/edavis10/redmine_data_generator](https://github.com/edavis10/redmine_data_generator)
+This is an updated version of original work done by {Eric Davis}[https://github.com/edavis10]
+https://github.com/edavis10/redmine_data_generator
 
 Updates done by Alexander Abramov and Aleksandar Pavić
