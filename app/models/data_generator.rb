@@ -11,24 +11,23 @@ class DataGenerator
     priorities = IssuePriority.all
     users = User.all
 
-    ActiveRecord::Base.observers = []
     count.to_i.times do |i|
-      project = projects.rand
-      parent_id = if [true, false].rand && project.issues.count > 0
-                    project.issues.first(:offset => (1..project.issues.count).to_a.rand).try(:id)
+      project = projects.sample
+      parent_id = if [true, false].sample && project.issues.count > 0
+                    project.issues.sample.try(:id)
                   end
       
       issue = Issue.new(
-                        :tracker => Tracker.find(:first),
+                        :tracker => Tracker.first,
                         :project => project,
                         :subject => Faker::Company.catch_phrase,
                         :description => Random.paragraphs(3),
-                        :status => status.rand,
-                        :priority => priorities.rand,
-                        :author => users.rand,
-                        :assigned_to => users.rand,
-                        :start_date => (1..120).to_a.rand.days.ago.to_date.to_s,
-                        :due_date => (1..120).to_a.rand.days.from_now.to_date.to_s,
+                        :status => status.sample,
+                        :priority => priorities.sample,
+                        :author => users.sample,
+                        :assigned_to => users.sample,
+                        :start_date => (1..120).to_a.sample.days.ago.to_date.to_s,
+                        :due_date => (1..120).to_a.sample.days.from_now.to_date.to_s,
                         :parent_issue_id => parent_id
                         )
       unless issue.save
@@ -40,35 +39,34 @@ class DataGenerator
   
   # Generate issues
   def self.issue_history(count=100)
-    ActiveRecord::Base.observers = []
     change_attributes = [:subject, :description, :priority, :status]
     status = IssueStatus.all
     priorities = IssuePriority.all
     
-    issues = Issue.all(:limit => count, :order => 'subject asc, id desc') # Semi-random sort
+    issues = Issue.all.limit(count).order(:subject, id: :desc) # Semi-random sort
     issues.each do |issue|
       issue.reload # in case of stale object from subtasks
-      User.current = issue.assignable_users.rand
+      User.current = issue.assignable_users.sample
 
       # Random changes
+      issue.init_journal(User.current, Random.paragraphs(1))
       number_of_changes = (change_attributes.length / 2).floor
       number_of_changes.times do
-        attribute_to_change = change_attributes.rand
+        attribute_to_change = change_attributes.sample
         case attribute_to_change
         when :subject
           issue.subject = Faker::Company.catch_phrase
         when :description
           issue.description = Random.paragraphs(3)
         when :priority
-          issue.priority = priorities.rand
+          issue.priority = priorities.sample
         when :status
-          issue.status = status.rand
+          issue.status = status.sample
         end
       end
-      issue.journal_notes = Random.paragraphs(1)
 
       created_days_ago = (Date.today - issue.created_on.to_date).to_i
-      update_date = (0..created_days_ago).to_a.rand # Random date since creation
+      update_date = (0..created_days_ago).to_a.sample # Random date since creation
       
       Timecop.freeze(update_date.days.ago) do
         unless issue.save
@@ -83,8 +81,8 @@ class DataGenerator
   # Generate projects and members
   def self.projects(count=5)
     count.to_i.times do |n|
-      parent = if [true, false].rand && Project.count > 0
-                 Project.first(:offset => (1..Project.count).to_a.rand)
+      parent = if [true, false].sample && Project.count > 0
+                 Project.all.sample
                end
                  
       project = Project.create(
@@ -95,15 +93,15 @@ class DataGenerator
                                )
       project.set_parent!(parent) if parent
       
-      project.trackers = Tracker.find(:all)
+      project.trackers = Tracker.all
       if project.save
         # Roles
-        roles =  Role.find(:all).reject {|role|
+        roles =  Role.all.reject {|role|
           role.builtin == Role::BUILTIN_NON_MEMBER || role.builtin == Role::BUILTIN_ANONYMOUS
         }
 
-        User.all(:conditions => ['status IN (?)', UserStatuses ]).each do |user|
-          Member.create({:user => user, :project => project, :roles => [roles.rand]})
+        User.where(status: UserStatuses).each do |user|
+          Member.create({:user => user, :project => project, :roles => [roles.sample]})
         end
 
         Redmine::AccessControl.available_project_modules.each do |module_name|
@@ -122,14 +120,14 @@ class DataGenerator
     activities = TimeEntryActivity.all
       
     count.to_i.times do
-      issue = issues.rand
+      issue = issues.sample
       te = TimeEntry.new(
                        :project => issue.project,
-                       :user => users.rand,
+                       :user => users.sample,
                        :issue => issue,
-                       :hours => (1..20).to_a.rand,
+                       :hours => (1..20).to_a.sample,
                        :comments => Faker::Company.bs,
-                       :activity => activities.rand,
+                       :activity => activities.sample,
                        :spent_on => Random.date
                          )
       unless te.save
@@ -150,8 +148,8 @@ class DataGenerator
                       )
       # Protected from mass assignment
       user.login = Faker::Internet.user_name
-      user.password = 'demo'
-      user.password_confirmation = 'demo'
+      user.password = 'demoomed'
+      user.password_confirmation = 'demoomed'
       user.save
     end
   end
