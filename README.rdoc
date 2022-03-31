@@ -2,19 +2,18 @@
 
 The Redmine Data Generator plugin is used to quickly generate a bunch of data for Redmine.
 
-== Features
 
-* TODO
+== Requirements
+
+Redmine 4.1+
 
 == Getting the plugin
 
-A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-misc/files] or from {GitHub}[http://github.com/edavis10/redmine-misc]
+git clone https://github.com/acosonic/redmine_data_generator into plugins directory
 
 == Installation and Setup
 
-1. Install the TODO gem: +sudo gem install +
-2. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins  Make sure the plugin is installed to +vendor/plugins/redmine_kanban+
-3. TODO
+1. Install with bundle install
 
 == Usage
 
@@ -22,6 +21,7 @@ To generate data, run any of the following rake tasks from your Redmine root
 
     rake data_generator:all              # Generates random data for all supported datatypes
     rake data_generator:issues           # Generate random issues.
+    rake data_generator:issue_history    # Generate random issues history
     rake data_generator:projects         # Generate random projects.
     rake data_generator:time_entries     # Generate random time entries.
     rake data_generator:users            # Generate random users.
@@ -30,7 +30,9 @@ To generate data, run any of the following rake tasks from your Redmine root
 
 This plugin is licensed under the GNU GPL v2.  See COPYRIGHT.txt and GPL.txt for details.
 
-== Project help
+== Authors
 
-If you need help you can contact the maintainer on the bug tracker located at  https://projects.littlestreamsoftware.com
+This is an updated version of original work done by [Eric Davis](https://github.com/edavis10)
+[https://github.com/edavis10/redmine_data_generator](https://github.com/edavis10/redmine_data_generator)
 
+Updates done by Alexander Abramov and Aleksandar Pavić
