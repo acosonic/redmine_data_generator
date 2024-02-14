@@ -5,6 +5,7 @@ namespace :data_generator do
   desc "Generate random issues.  Default: 100, override with COUNT=x"
   task :issues => :environment do
     DataGenerator.issues ENV['COUNT'] || 100
+    puts "#{Issue.count} issues total"
   end
 
   desc "Generate random issue history for several issues.  Default: 500, override with COUNT=x"
@@ -15,6 +16,7 @@ namespace :data_generator do
   desc "Generate random projects.  Default: 15, override with COUNT=x"
   task :projects => :environment do
     DataGenerator.projects ENV['COUNT'] || 15
+    puts "#{Project.count} projects total"
   end
 
   desc "Generate random time entries.  Default: 100, override with COUNT=x"
@@ -24,6 +26,7 @@ namespace :data_generator do
 
   desc "Generate random users.  Default: 15, override with COUNT=x"
   task :users => :environment do
-    DataGenerator.users ENV['COUNT'] || 15
+    DataGenerator.users ENV['COUNT'] || 15 
+    puts "#{User.count} users total"
   end
 end
