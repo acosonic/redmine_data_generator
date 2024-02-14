@@ -143,7 +143,7 @@ class DataGenerator
       user = User.new(
                       :firstname => Faker::Name.first_name,
                       :lastname => Faker::Name.last_name,
-                      :mail => Faker::Internet.free_email,
+                      :mail => Faker::Internet.email,
                       :status => User::STATUS_ACTIVE
                       )
       # Protected from mass assignment
