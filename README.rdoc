@@ -2,6 +2,7 @@
 
 The Redmine Data Generator plugin is used to quickly generate a bunch of data for Redmine.
 
+It is currently tested and working with Redmine 5.1.1
 
 == Requirements
 
