@@ -10,7 +10,8 @@ class DataGenerator
     status = IssueStatus.all
     priorities = IssuePriority.all
     users = User.all
-
+    trackers = Tracker.all
+    
     count.to_i.times do |i|
       project = projects.sample
       parent_id = if [true, false].sample && project.issues.count > 0
@@ -18,7 +19,7 @@ class DataGenerator
                   end
       
       issue = Issue.new(
-                        :tracker => Tracker.first,
+                        :tracker => trackers.sample,
                         :project => project,
                         :subject => Faker::Company.catch_phrase,
                         :description => Random.paragraphs(3),
